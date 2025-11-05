@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Samal Land Surveying</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" href="../assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="admin-login-container">
+        <div class="login-form">
+            <div class="login-header">
+                <img src="../assets/logo.png" alt="Samal Land Surveying Logo" class="login-logo">
+                <h2>Admin Portal</h2>
+                <p>Samal Land Surveying Appointments</p>
+            </div>
+            
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" required placeholder="Enter your username">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <a href="../html/index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Main Site
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden until login) -->
+    <div id="dashboardScreen" class="admin-container" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logo.png" alt="Samal Land Surveying Logo" class="sidebar-logo">
+                <h3>Samal Surveying</h3>
+                <p>Admin Panel</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-tab="engineers">
+                    <i class="fas fa-users-cog"></i> Engineers
+                </a>
+                <a href="#" class="nav-item" data-tab="bookings">
+                    <i class="fas fa-calendar-check"></i> Bookings
+                </a>
+                <a href="#" class="nav-item" data-tab="availability">
+                    <i class="fas fa-calendar-alt"></i> Availability
+                </a>
+                <a href="#" class="nav-item" data-tab="statistics">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </a>
+                <a href="#" class="nav-item" data-tab="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="admin-profile">
+                    <div class="admin-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="admin-info">
+                        <span class="admin-name">Administrator</span>
+                        <span class="admin-role">Super Admin</span>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle">Dashboard Overview</h1>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="header-btn" id="notificationsBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="header-btn" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="current-date">
+                        <i class="fas fa-calendar-day"></i>
+                        <span id="currentDate"></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon total-bookings">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalAppointments">0</h3>
+                                <p>Total Bookings</p>
+                                <span class="stat-trend up">+12% this month</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon pending">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="pendingAppointments">0</h3>
+                                <p>Pending Approval</p>
+                                <span class="stat-trend">Needs attention</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon confirmed">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="confirmedAppointments">0</h3>
+                                <p>Confirmed</p>
+                                <span class="stat-trend up">+8% this week</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon engineers">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalEngineers">0</h3>
+                                <p>Active Engineers</p>
+                                <span class="stat-trend">All available</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="recent-activity card">
+                            <div class="card-header">
+                                <h3>Recent Bookings</h3>
+                                <a href="#" class="view-all" data-tab="bookings">View All</a>
+                            </div>
+                            <div class="card-content">
+                                <div class="activity-list" id="recentAppointments">
+                                    <div class="loading">Loading recent appointments...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-schedule card">
+                            <div class="card-header">
+                                <h3>Today's Schedule</h3>
+                                <span class="schedule-date" id="todayDate"></span>
+                            </div>
+                            <div class="card-content">
+                                <div class="schedule-list" id="todaySchedule">
+                                    <div class="loading">Loading today's schedule...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engineers Management Tab -->
+                <div id="engineers" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Engineers Management</h2>
+                        <div class="tab-actions">
+                            <button class="btn btn-primary" id="addEngineerBtn">
+                                <i class="fas fa-user-plus"></i> Add New Engineer
+                            </button>
+                            <button class="btn btn-secondary" id="refreshEngineers">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="engineers-grid" id="engineersGrid">
+                        <div class="loading">Loading engineers...</div>
+                    </div>
+                </div>
+
+                <!-- Bookings Management Tab -->
+                <div id="bookings" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Bookings Management</h2>
+                        <div class="tab-actions">
+                            <button class="btn btn-primary" id="exportBookings">
+                                <i class="fas fa-download"></i> Export CSV
+                            </button>
+                            <button class="btn btn-secondary" id="refreshBookings">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <label>Status:</label>
+                            <select id="statusFilter">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Service:</label>
+                            <select id="serviceFilter">
+                                <option value="all">All Services</option>
+                                <option value="Topographic Survey">Topographic Survey</option>
+                                <option value="Utility Survey">Utility Survey</option>
+                                <option value="Bathymetric Survey">Bathymetric Survey</option>
+                                <option value="Aerial Survey">Aerial Survey</option>
+                                <option value="Lot Verification Survey">Lot Verification Survey</option>
+                                <option value="Site Development Plan">Site Development Plan</option>
+                                <option value="Land Title Applications">Land Title Applications</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Date:</label>
+                            <input type="date" id="dateFilter">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Engineer:</label>
+                            <select id="engineerFilter">
+                                <option value="all">All Engineers</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Client Name</th>
+                                    <th>Service</th>
+                                    <th>Date & Time</th>
+                                    <th>Engineer</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTable">
+                                <tr>
+                                    <td colspan="8" class="no-data">Loading bookings...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Availability Management Tab -->
+                <div id="availability" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Company Availability</h2>
+                        <div class="tab-actions">
+                            <button class="btn btn-primary" id="saveSchedule">
+                                <i class="fas fa-save"></i> Save Schedule
+                            </button>
+                            <button class="btn btn-secondary" id="blockDateBtn">
+                                <i class="fas fa-ban"></i> Block Date
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="availability-content">
+                        <div class="weekly-schedule card">
+                            <div class="card-header">
+                                <h3>Weekly Business Hours</h3>
+                                <span>Set your regular working hours</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="schedule-grid" id="weeklySchedule">
+                                    <!-- Weekly schedule will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blocked-dates card">
+                            <div class="card-header">
+                                <h3>Blocked Dates & Holidays</h3>
+                                <span>Dates when company is unavailable</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="blocked-list" id="blockedDatesList">
+                                    <div class="loading">Loading blocked dates...</div>
+                                </div>
+                                <div class="add-blocked-date">
+                                    <input type="date" id="newBlockedDate" placeholder="Select date to block">
+                                    <input type="text" id="blockReason" placeholder="Reason for blocking">
+                                    <button class="btn btn-secondary" id="addBlockedDate">
+                                        <i class="fas fa-plus"></i> Add Blocked Date
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Tab -->
+                <div id="statistics" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Statistics & Reports</h2>
+                        <div class="tab-actions">
+                            <select id="timeRange" class="time-filter">
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                            <button class="btn btn-primary" id="generateReport">
+                                <i class="fas fa-file-pdf"></i> Generate Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="statistics-content">
+                        <div class="charts-grid">
+                            <div class="chart-card card">
+                                <div class="card-header">
+                                    <h3>Bookings by Service Type</h3>
+                                </div>
+                                <div class="card-content">
+                                    <canvas id="serviceChart" height="250"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="chart-card card">
+                                <div class="card-header">
+                                    <h3>Monthly Bookings Trend</h3>
+                                </div>
+                                <div class="card-content">
+                                    <canvas id="monthlyChart" height="250"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="chart-card card">
+                                <div class="card-header">
+                                    <h3>Booking Status Distribution</h3>
+                                </div>
+                                <div class="card-content">
+                                    <canvas id="statusChart" height="250"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="stats-card card">
+                                <div class="card-header">
+                                    <h3>Performance Metrics</h3>
+                                </div>
+                                <div class="card-content">
+                                    <div class="metric">
+                                        <span class="metric-label">Conversion Rate</span>
+                                        <span class="metric-value">68%</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Avg. Response Time</span>
+                                        <span class="metric-value">2.3 hours</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Customer Satisfaction</span>
+                                        <span class="metric-value">4.8/5</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Revenue This Month</span>
+                                        <span class="metric-value">₱125,430</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Admin Settings</h2>
+                        <div class="tab-actions">
+                            <button class="btn btn-primary" id="saveSettings">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-content">
+                        <div class="settings-grid">
+                            <!-- Company Settings -->
+                            <div class="settings-section card">
+                                <div class="card-header">
+                                    <h3>Company Information</h3>
+                                    <span>Update company details</span>
+                                </div>
+                                <div class="card-content">
+                                    <div class="form-group">
+                                        <label for="companyName">Company Name</label>
+                                        <input type="text" id="companyName" placeholder="Enter company name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="companyEmail">Contact Email</label>
+                                        <input type="email" id="companyEmail" placeholder="Enter contact email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="companyPhone">Contact Phone</label>
+                                        <input type="tel" id="companyPhone" placeholder="Enter contact phone">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="companyAddress">Company Address</label>
+                                        <textarea id="companyAddress" placeholder="Enter company address" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Admin Security -->
+                            <div class="settings-section card">
+                                <div class="card-header">
+                                    <h3>Admin Security</h3>
+                                    <span>Change admin password</span>
+                                </div>
+                                <div class="card-content">
+                                    <div class="form-group">
+                                        <label for="currentPassword">Current Password</label>
+                                        <input type="password" id="currentPassword" placeholder="Enter current password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPassword">New Password</label>
+                                        <input type="password" id="newPassword" placeholder="Enter new password">
+                                        <small class="password-hint">Password must be at least 8 characters long</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirm New Password</label>
+                                        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                    </div>
+                                    <button class="btn btn-primary" id="changePasswordBtn">
+                                        <i class="fas fa-key"></i> Change Password
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- System Preferences -->
+                            <div class="settings-section card">
+                                <div class="card-header">
+                                    <h3>System Preferences</h3>
+                                    <span>Configure system behavior</span>
+                                </div>
+                                <div class="card-content">
+                                    <div class="preference-item">
+                                        <input type="checkbox" id="emailNotifications" checked>
+                                        <label for="emailNotifications">Enable Email Notifications</label>
+                                    </div>
+                                    <div class="preference-item">
+                                        <input type="checkbox" id="autoConfirm" checked>
+                                        <label for="autoConfirm">Auto-confirm bookings during business hours</label>
+                                    </div>
+                                    <div class="preference-item">
+                                        <input type="checkbox" id="maintenanceMode">
+                                        <label for="maintenanceMode">Maintenance Mode</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sessionTimeout">Session Timeout (minutes)</label>
+                                        <input type="number" id="sessionTimeout" value="480" min="30" max="1440">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Backup & Export -->
+                            <div class="settings-section card">
+                                <div class="card-header">
+                                    <h3>Data Management</h3>
+                                    <span>Backup and export data</span>
+                                </div>
+                                <div class="card-content">
+                                    <div class="backup-actions">
+                                        <button class="btn btn-secondary" id="exportDataBtn">
+                                            <i class="fas fa-download"></i> Export All Data
+                                        </button>
+                                        <button class="btn btn-secondary" id="backupDataBtn">
+                                            <i class="fas fa-database"></i> Create Backup
+                                        </button>
+                                    </div>
+                                    <div class="backup-info">
+                                        <p><strong>Last Backup:</strong> <span id="lastBackupDate">Never</span></p>
+                                        <p><strong>Database Size:</strong> <span id="databaseSize">0 MB</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- Add Engineer Modal -->
+    <div id="addEngineerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Engineer</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="engineerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="engineerName" required placeholder="Enter full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="engineerEmail" required placeholder="Enter email address">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="engineerPhone" required placeholder="Enter phone number">
+                        </div>
+                        <div class="form-group">
+                            <label>Specialization</label>
+                            <select id="engineerSpecialization" required>
+                                <option value="">Select Specialization</option>
+                                <option value="Topographic Survey">Topographic Survey</option>
+                                <option value="Utility Survey">Utility Survey</option>
+                                <option value="Bathymetric Survey">Bathymetric Survey</option>
+                                <option value="Aerial Survey">Aerial Survey</option>
+                                <option value="Land Title">Land Title Applications</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea id="engineerAddress" placeholder="Enter full address"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelEngineer">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Engineer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Details Modal -->
+    <div id="bookingDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Booking Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="bookingDetailsContent">
+                    <!-- Booking details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h3>Confirm Action</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure you want to perform this action?</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelConfirm">Cancel</button>
+                <button class="btn btn-primary" id="proceedConfirm">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html>
